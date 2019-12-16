@@ -5,7 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Flat(models.Model):
-    owner = models.CharField("ФИО владельца", max_length=200)
+    owner_depricated = models.CharField("ФИО владельца", max_length=200)
     owners_phonenumber = models.CharField("Номер владельца", max_length=20)
     new_building = models.NullBooleanField("Новое здание")
     owners_phone_pure = PhoneNumberField('Нормализованный номер', blank=True, null=True)
