@@ -5,7 +5,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Flat(models.Model):
-    owner = models.ManyToManyField("Owner", verbose_name='Владелец')
     new_building = models.NullBooleanField("Новое здание", db_index=True)
     created_at = models.DateTimeField("Когда создано объявление", default=timezone.now, db_index=True)
     
@@ -24,7 +23,7 @@ class Flat(models.Model):
     active = models.BooleanField("Активно-ли объявление", db_index=True)
     construction_year = models.IntegerField("Год постройки здания", null=True, blank=True, db_index=True)
     liked_by = models.ManyToManyField(User, verbose_name = "Кто лайкнул",
-                                      blank=True)
+                                      blank=True, related_name="liked")
     def __str__(self):
         return f"{self.town}, {self.address} ({self.price}р.)"
 
@@ -32,9 +31,11 @@ class Flat(models.Model):
 class Complaint(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL,
                                null=True,
-                               verbose_name="Кто жаловался")
+                               verbose_name="Кто жаловался",
+                               related_name="complaint")
     flat = models.ForeignKey(Flat, on_delete=models.CASCADE,
-                             verbose_name="Квартира, на которую жаловались")
+                             verbose_name="Квартира, на которую жаловались",
+                             related_name="complaint")
     text = models.TextField("Текст жалобы")
 
 
@@ -43,7 +44,7 @@ class Owner(models.Model):
                              db_index=True)
     owners_phonenumber = models.CharField("Номер владельца", max_length=20)
     owners_phone_pure = PhoneNumberField("Нормализованный номер", blank=True, null=True)
-    owners_flats = models.ManyToManyField(Flat, related_name="flats",
+    owners_flats = models.ManyToManyField(Flat, related_name="owner",
                                          verbose_name="Квартиры в собственности")
 
     def __str__(self):
