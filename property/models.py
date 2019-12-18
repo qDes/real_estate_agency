@@ -6,7 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Flat(models.Model):
     owner = models.ManyToManyField("Owner", verbose_name='Владелец')
-    new_building = models.NullBooleanField("Новое здание")
+    new_building = models.NullBooleanField("Новое здание", db_index=True)
     created_at = models.DateTimeField("Когда создано объявление", default=timezone.now, db_index=True)
     
     description = models.TextField("Текст объявления", blank=True)
@@ -36,6 +36,7 @@ class Complaint(models.Model):
     flat = models.ForeignKey(Flat, on_delete=models.CASCADE,
                              verbose_name="Квартира, на которую жаловались")
     text = models.TextField("Текст жалобы")
+
 
 class Owner(models.Model):
     owner = models.CharField("ФИО владельца", max_length=200,
