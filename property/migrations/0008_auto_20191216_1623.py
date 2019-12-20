@@ -9,9 +9,8 @@ def fill_owner_phone_pure(apps, schema_editor):
     for flat in Flat.objects.all():
         number = phonenumbers.parse(flat.owners_phonenumber, "RU")
         if phonenumbers.is_valid_number(number):
-            raw = phonenumbers.format_number(number, 
-                                             phonenumbers.PhoneNumberFormat.E164)
-            flat.owners_phone_pure = raw
+            flat.owners_phone_pure = phonenumbers.format_number(number,
+                phonenumbers.PhoneNumberFormat.E164)
         flat.save()
 
 
